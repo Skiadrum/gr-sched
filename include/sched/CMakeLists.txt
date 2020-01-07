@@ -24,5 +24,7 @@
 install(FILES
     api.h
     ncopy.h
-    msg_forward.h DESTINATION include/sched
+    msg_forward.h
+    timestamp_in.h
+    timestamp_out.h DESTINATION include/sched
 )

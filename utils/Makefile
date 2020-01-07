@@ -6,6 +6,8 @@ BUFFERRESULTS=$(shell python -c 'import itertools; import numpy as np; print(" "
 
 OPTIRESULTS=$(shell python -c 'import itertools; import numpy as np; print(" ".join(["perf-data/opti_{0}_{1}_{2}_{3}_{4}_.csv".format(*x) for x in itertools.product(range(100), np.arange(1,21), [1000000000], ["true"], ["default", "opti", "perf"])]))')
 
+DURRESULTS=$(shell python -c 'import itertools; import numpy as np; print(" ".join(["perf-data/dur_{0}_.csv".format(*x) for x in itertools.product([100])]))')
+
 REPETITIONS=10
 
 .PHONY: setup all msg buf clean migrations resched opti
@@ -14,9 +16,11 @@ all: setup $(MSGRESULTS) $(BUFFERRESULTS)
 
 msg: setup $(MSGRESULTS)
 
-buf: setup $(BUFFERRESULTS)
+buf: $(BUFFERRESULTS)
 
 opti: setup $(OPTIRESULTS)
+
+dur: setup $(DURRESULTS)
 
 setup:
 	@echo "### SETTING UP"
@@ -44,6 +48,17 @@ perf-data/msg%.csv:
 	@echo REPETITIONS=$(REPETITIONS)
 
 	cset shield --userset=sdr --exec -- ./build/run_msg_flowgraph -m --run=$(RUN) --pipes=$(PIPES) --stages=$(STAGES) --repetitions=$(REPETITIONS) --burst_size=$(BURST_SIZE) --pdu_size=$(PDU_SIZE) $(RT) --config=$(CONFIG) | grep -v cset > $@
+
+perf-data/dur%.csv:
+	mkdir -p perf-data
+	@echo $@
+	$(eval RUN=$(shell python -c "print \"$@\".split(\"_\")[1]"))
+	$(eval STAGES=$(shell python -c "print \"$@\".split(\"_\")[3]"))
+	@echo RUN=$(RUN)
+	@echo STAGES=$(STAGES)
+	@echo REPETITIONS=$(REPETITIONS)
+
+	cset shield --userset=sdr --exec -- ./build/run_dur_flowgraph -m --run=$(RUN) --stages=$(STAGES) --repetitions=$(REPETITIONS) | grep -v cset > $@
 
 
 perf-data/buf%.csv:
@@ -82,7 +97,7 @@ perf-data/opti%.csv:
 	cset shield --userset=sdr --exec -- ./build/run_opti_flowgraph -m --run $(RUN) --stages=$(STAGES) --samples=$(SAMPLES) $(RT) --config=$(CONFIG) | grep -v cset > $@
 
 
-migrations: migrations_rt.csv migrations.csv 
+migrations: migrations_rt.csv migrations.csv
 
 migrations_rt.dat:
 	sudo perf record -C 2,3,6,7 -o migrations_rt.dat -m 32768 -e sched:sched_migrate_task -- cset shield --userset=sdr --exec -- ./build/run_buf_flowgraph -m --run 0 --pipes=4 --stages=4 --samples=100000000 --config=fork -t
@@ -106,7 +121,7 @@ clean:
 	rm -f migrations{,_rt}.{dat,dat.old,csv} perf.data{,.old} resched{,_rt}.{dat,dat.old,csv}
 
 
-resched: resched_rt.csv resched.csv 
+resched: resched_rt.csv resched.csv
 
 resched_rt.dat:
 	sudo perf record -C 2,3,6,7 -o resched_rt.dat -m 65536 -e sched:sched_switch -- cset shield --userset=sdr --exec -- ./build/run_buf_flowgraph -m --run 0 --pipes=10 --stages=10 --samples=100000000 --config=fork -t

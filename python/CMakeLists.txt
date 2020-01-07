@@ -42,3 +42,5 @@ include(GrTest)
 
 set(GR_TEST_TARGET_DEPS gnuradio-sched)
 set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig)
+GR_ADD_TEST(qa_timestamp_in ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_timestamp_in.py)
+GR_ADD_TEST(qa_timestamp_out ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_timestamp_out.py)

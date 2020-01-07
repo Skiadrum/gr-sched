@@ -17,6 +17,7 @@ inputs:
   domain: stream
   dtype: float
 
+outputs:
 - label: out
   domain: stream
   dtype: float

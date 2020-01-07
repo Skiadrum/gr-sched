@@ -1,4 +1,5 @@
 
+
 add_executable(run_msg_flowgraph run_msg_flowgraph.cpp)
 target_link_libraries(run_msg_flowgraph
   gnuradio::gnuradio-runtime
@@ -19,3 +20,10 @@ target_link_libraries(run_opti_flowgraph
   gnuradio::gnuradio-blocks
   gnuradio-sched
   )
+
+add_executable(run_dur_flowgraph run_dur_flowgraph.cpp)
+target_link_libraries(run_dur_flowgraph
+  gnuradio::gnuradio-runtime
+  gnuradio::gnuradio-blocks
+  gnuradio-sched
+        )

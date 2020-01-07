@@ -26,6 +26,8 @@ include(GrPlatform) #define LIB_SUFFIX
 list(APPEND sched_sources
     ncopy_impl.cc
     msg_forward_impl.cc
+    timestamp_in_impl.cc
+    timestamp_out_impl.cc
 )
 
 set(sched_sources "${sched_sources}" PARENT_SCOPE)
@@ -83,3 +85,5 @@ foreach(qa_file ${test_sched_sources})
         ${CMAKE_CURRENT_SOURCE_DIR}/${qa_file}
     )
 endforeach(qa_file)
+#    ${CMAKE_CURRENT_SOURCE_DIR}/qa_timestamp_in.cc
+#    ${CMAKE_CURRENT_SOURCE_DIR}/qa_timestamp_out.cc

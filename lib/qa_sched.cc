@@ -27,11 +27,17 @@
  */
 
 #include "qa_sched.h"
+#include "qa_time_input.h"
+#include "qa_timestamp_in.h"
+#include "qa_timestamp_out.h"
 
 CppUnit::TestSuite *
 qa_sched::suite()
 {
   CppUnit::TestSuite *s = new CppUnit::TestSuite("sched");
+  s->addTest(gr::sched::qa_time_input::suite());
+  s->addTest(gr::sched::qa_timestamp_in::suite());
+  s->addTest(gr::sched::qa_timestamp_out::suite());
 
   return s;
 }
