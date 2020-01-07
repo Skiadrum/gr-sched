@@ -16,7 +16,7 @@ all: setup $(MSGRESULTS) $(BUFFERRESULTS)
 
 msg: setup $(MSGRESULTS)
 
-buf: $(BUFFERRESULTS)
+buf: setup $(BUFFERRESULTS)
 
 opti: setup $(OPTIRESULTS)
 
@@ -47,7 +47,7 @@ perf-data/msg%.csv:
 	@echo RT=$(RT)
 	@echo REPETITIONS=$(REPETITIONS)
 
-	cset shield --userset=sdr --exec -- ./build/run_msg_flowgraph -m --run=$(RUN) --pipes=$(PIPES) --stages=$(STAGES) --repetitions=$(REPETITIONS) --burst_size=$(BURST_SIZE) --pdu_size=$(PDU_SIZE) $(RT) --config=$(CONFIG) | grep -v cset > $@
+	cset shield --userset=sdr --exec -- ../build/utils/run_msg_flowgraph -m --run=$(RUN) --pipes=$(PIPES) --stages=$(STAGES) --repetitions=$(REPETITIONS) --burst_size=$(BURST_SIZE) --pdu_size=$(PDU_SIZE) $(RT) --config=$(CONFIG) | grep -v cset > $@
 
 perf-data/dur%.csv:
 	mkdir -p perf-data
@@ -58,7 +58,7 @@ perf-data/dur%.csv:
 	@echo STAGES=$(STAGES)
 	@echo REPETITIONS=$(REPETITIONS)
 
-	cset shield --userset=sdr --exec -- ./build/run_dur_flowgraph -m --run=$(RUN) --stages=$(STAGES) --repetitions=$(REPETITIONS) | grep -v cset > $@
+	cset shield --userset=sdr --exec -- ../build/utils/run_dur_flowgraph -m --run=$(RUN) --stages=$(STAGES) --repetitions=$(REPETITIONS) | grep -v cset > $@
 
 
 perf-data/buf%.csv:
@@ -77,7 +77,7 @@ perf-data/buf%.csv:
 	@echo RT=$(RT)
 	@echo CONFIG=$(CONFIG)
 
-	cset shield --userset=sdr --exec -- ./build/run_buf_flowgraph -m --run $(RUN) --pipes=$(PIPES) --stages=$(STAGES) --samples=$(SAMPLES) $(RT) --config=$(CONFIG) | grep -v cset > $@
+	cset shield --userset=sdr --exec -- ../build/utils/run_buf_flowgraph -m --run $(RUN) --pipes=$(PIPES) --stages=$(STAGES) --samples=$(SAMPLES) $(RT) --config=$(CONFIG) | grep -v cset > $@
 
 
 perf-data/opti%.csv:
@@ -94,7 +94,7 @@ perf-data/opti%.csv:
 	@echo RT=$(RT)
 	@echo CONFIG=$(CONFIG)
 
-	cset shield --userset=sdr --exec -- ./build/run_opti_flowgraph -m --run $(RUN) --stages=$(STAGES) --samples=$(SAMPLES) $(RT) --config=$(CONFIG) | grep -v cset > $@
+	cset shield --userset=sdr --exec -- ../build/utils/run_opti_flowgraph -m --run $(RUN) --stages=$(STAGES) --samples=$(SAMPLES) $(RT) --config=$(CONFIG) | grep -v cset > $@
 
 
 migrations: migrations_rt.csv migrations.csv
