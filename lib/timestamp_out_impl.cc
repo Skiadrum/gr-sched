@@ -96,16 +96,15 @@ namespace gr {
                 results.push_back(test);
             //    myfile << test << std::endl;
 
-                std::cout << "Duration " << test << std::endl;
             }
 
 
-            for (auto i = results.begin(); i != results.end(); ++i) {
+      /*      for (auto i = results.begin(); i != results.end(); ++i) {
             //    std::cout << *i << ' ';
                 myfile << *i << std::endl;
             }
 
-            myfile.close();
+            myfile.close(); */
 
             return noutput_items;
         }

@@ -25,30 +25,29 @@
 #include <gnuradio/block.h>
 
 namespace gr {
-  namespace sched {
+    namespace sched {
 
-    /*!
-     * \brief <+description of block+>
-     * \ingroup sched
-     *
-     */
-    class SCHED_API timestamp_in : virtual public gr::block
-    {
-     public:
-      typedef boost::shared_ptr<timestamp_in> sptr;
+        /*!
+         * \brief <+description of block+>
+         * \ingroup sched
+         *
+         */
+        class SCHED_API timestamp_in : virtual public gr::block {
+        public:
+            typedef boost::shared_ptr<timestamp_in> sptr;
 
-      /*!
-       * \brief Return a shared_ptr to a new instance of sched::timestamp_in.
-       *
-       * To avoid accidental use of raw pointers, sched::timestamp_in's
-       * constructor is in a private implementation
-       * class. sched::timestamp_in::make is the public interface for
-       * creating new instances.
-       */
-      static sptr make();
-    };
+            /*!
+             * \brief Return a shared_ptr to a new instance of sched::timestamp_in.
+             *
+             * To avoid accidental use of raw pointers, sched::timestamp_in's
+             * constructor is in a private implementation
+             * class. sched::timestamp_in::make is the public interface for
+             * creating new instances.
+             */
+            static sptr make();
+        };
 
-  } // namespace sched
+    } // namespace sched
 } // namespace gr
 
 #endif /* INCLUDED_SCHED_TIMESTAMP_IN_H */

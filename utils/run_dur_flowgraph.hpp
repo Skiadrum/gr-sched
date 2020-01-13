@@ -5,6 +5,9 @@
 #include "sched/timestamp_in.h"
 #include <sched/timestamp_out.h>
 
+#include <gnuradio/blocks/copy.h>
+
+
 #include <iostream>
 #include <boost/program_options.hpp>
 
@@ -16,12 +19,18 @@ private:
 
     int d_stages;
 
+    void create_fork();
+
 public:
-    explicit run_dur_flowgraph(int stages);
-        ~run_dur_flowgraph();
+    run_dur_flowgraph(int stages);
+
+    ~run_dur_flowgraph();
 
     top_block_sptr tb;
-    sched::timestamp_out::sptr src;
+    //sched::timestamp_in::sptr src;
+    //sched::timestamp_out::sptr sink;
+    //std::vector<blocks::copy::sptr> blocks;
+
 };
 
 
