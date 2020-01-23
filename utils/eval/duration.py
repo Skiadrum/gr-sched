@@ -26,19 +26,15 @@ def conf_int(data, confidence=0.95):
 ################################################################
 ## Line Plot RT-Prio (n, n) scaling
 ################################################################
-d = (pd.read_csv('../perf-data/example.csv'))
+d = (pd.read_csv('../perf-data/dur.csv', usecols = ['time']))
 
-
-t = stats.norm.pdf(d, np.mean(d), np.std(d))
-
+print(d)
 fig, ax = plt.subplots(1, 1)
 
 
-#plt.plot(d, t, '-o')
-
-pl.hist(d, normed=True)
-
-
+plt.hist(d['time'], bins=[1000000,1500000,2000000,2500000,3000000,3500000,4000000], rwidth= 0.9)
+plt.xlabel('duration')
+plt.ylabel('numbers')
 
 fig.savefig('duration.pdf')
 plt.show()

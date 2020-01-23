@@ -18,8 +18,6 @@ using namespace gr;
 
 run_dur_flowgraph::run_dur_flowgraph(int stages) :
         d_stages(stages) {
-    std::cout << "t2" << std::endl;
-
 
     this->tb = make_top_block("dur_flowgraph");
     create_fork();
@@ -30,9 +28,11 @@ void
 run_dur_flowgraph::create_fork() {
 
     auto src = sched::timestamp_in::make();
+    auto head = blocks::head::make(sizeof(float), 102400);
 
     gr::blocks::copy::sptr prev = gr::blocks::copy::make(sizeof(float));
-    tb->connect(src, 0, prev, 0);
+    tb->connect(src, 0, head, 0);
+    tb->connect(head, 0, prev, 0);
 
 
     for(int stage = 1; stage < d_stages; stage++) {
@@ -41,8 +41,8 @@ run_dur_flowgraph::create_fork() {
         prev = block;
     }
 
-    auto snk = sched::timestamp_out::make();
-    tb->connect(prev, 0, snk, 0);
+     sink = sched::timestamp_out::make();
+    tb->connect(prev, 0, sink, 0);
 }
 
 run_dur_flowgraph::~run_dur_flowgraph() {
@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
         std::cout << "Error: failed to enable real-time scheduling." << std::endl;
     }
 
-    run_dur_flowgraph *runner = new run_dur_flowgraph(stages);
+    run_dur_flowgraph* runner = new run_dur_flowgraph(stages);
 
     if (!machine_readable) {
         std::cout << boost::format("run         %1$20d") % run << std::endl;
@@ -96,23 +96,28 @@ int main(int argc, char **argv) {
 
 
 
-     //   sched::timestamp_out *t;
+      //  sched::timestamp_out *t;
 
-    //    std::vector<long> results = t->getResults();
+      //  std::vector<long> results = t->getResults();
 
+       // sink.getResults;
     //    for (auto i = results.begin(); i != results.end(); ++i) {
     //        std::cout << *i << std::endl;
     //    }
 
         auto start = std::chrono::high_resolution_clock::now();
-        std::cout << "t1" << std::endl;
         runner->tb->run();
+        std::vector<long> results = runner->sink->getResults();
 
-    auto finish = std::chrono::high_resolution_clock::now();
+    for (auto i = results.begin(); i != results.end(); ++i) {
+        std::cout << boost::format(" %1$4d, %2$4d, %3$20.12f") % run % stages % *i << std::endl;
+
+    }
+
+        auto finish = std::chrono::high_resolution_clock::now();
         auto time = std::chrono::duration_cast<std::chrono::nanoseconds>(finish - start).count() / 1e9;
 
 
-    std::cout << boost::format(" $4d, $4d, $20.12f") % run % stages % time << std::endl;
 
     return 0;
 }

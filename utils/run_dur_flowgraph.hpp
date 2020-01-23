@@ -28,7 +28,7 @@ public:
 
     top_block_sptr tb;
     //sched::timestamp_in::sptr src;
-    //sched::timestamp_out::sptr sink;
+    sched::timestamp_out::sptr sink;
     //std::vector<blocks::copy::sptr> blocks;
 
 };

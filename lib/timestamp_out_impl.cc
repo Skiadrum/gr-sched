@@ -43,7 +43,7 @@ namespace gr {
          */
         timestamp_out_impl::timestamp_out_impl()
                 : gr::sync_block("timestamp_out",
-                                 gr::io_signature::make(1, 1, sizeof(1)),
+                                 gr::io_signature::make(1, 1, sizeof(float)),
                                  gr::io_signature::make(0, 0, 0)) {
         }
 
@@ -91,8 +91,9 @@ namespace gr {
             myfile.open ("example.csv");
             myfile << "Duration\n";
 
+
             for (tag_t tag : tags) {
-                double test = nano - pmt::to_double(tag.value);
+                double test = (nano - pmt::to_double(tag.value));
                 results.push_back(test);
             //    myfile << test << std::endl;
 

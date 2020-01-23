@@ -30,13 +30,14 @@ d = d[d['config'] == 'fork']
 
 t = d.groupby(['rt', 'stages']).agg({'time': [np.mean,
 np.var]}).reset_index()
-print(t)
+
 t = t.pivot('stages', 'rt', ('time', 'mean'))
 print(t)
 fig, ax = plt.subplots(1, 1)
 
 for c in t.columns:
     plt.plot(t[c].index**2, t[c], label=str(c))
+    print(t[c].index)
 
 ax.set_xlabel('Pipes and Stages')
 ax.set_ylabel('Real (in s)')

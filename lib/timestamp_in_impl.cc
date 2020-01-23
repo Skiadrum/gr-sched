@@ -44,7 +44,7 @@ namespace gr {
         timestamp_in_impl::timestamp_in_impl()
                 : gr::block("timestamp_in",
                             gr::io_signature::make(0, 0, 0),
-                            gr::io_signature::make(1, 1, sizeof(1))) {
+                            gr::io_signature::make(1, 1, sizeof(float))) {
         }
 
         /*
@@ -66,8 +66,6 @@ namespace gr {
 
             auto duration = std::chrono::high_resolution_clock::now().time_since_epoch();
             auto nano = std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count();
-
-           // std::cout << "Start computation at " << nano << std::endl;
 
             add_item_tag(0,
                          nitems_written(0),
