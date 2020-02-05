@@ -6,7 +6,7 @@ BUFFERRESULTS=$(shell python -c 'import itertools; import numpy as np; print(" "
 
 OPTIRESULTS=$(shell python -c 'import itertools; import numpy as np; print(" ".join(["perf-data/opti_{0}_{1}_{2}_{3}_{4}_.csv".format(*x) for x in itertools.product(range(100), np.arange(1,21), [1000000000], ["true"], ["default", "opti", "perf"])]))')
 
-DURRESULTS=$(shell python -c 'import itertools; import numpy as np; print(" ".join(["perf-data/dur_{0}_{1}_.csv".format(*x) for x in itertools.product(range(1,10), [10])]))')
+DURRESULTS=$(shell python -c 'import itertools; import numpy as np; print(" ".join(["perf-data/dur_{0}_{1}_{2}_{3}_.csv".format(*x) for x in itertools.product(range(1,10), [0],[10], [102400])]))')
 
 REPETITIONS=10
 
@@ -53,11 +53,16 @@ perf-data/dur%.csv:
 	mkdir -p perf-data
 	@echo $@
 	$(eval RUN=$(shell python -c "print \"$@\".split(\"_\")[1]"))
-	$(eval STAGES=$(shell python -c "print \"$@\".split(\"_\")[2]"))
+	$(eval PIPES=$(shell python -c "print \"$@\".split(\"_\")[2]"))
+	$(eval STAGES=$(shell python -c "print \"$@\".split(\"_\")[3]"))
+	$(eval SAMPLES=$(shell python -c "print \"$@\".split(\"_\")[4]"))
 	@echo RUN=$(RUN)
+	@echo PIPES=$(PIPES)
 	@echo STAGES=$(STAGES)
+	@echo SAMPLES=$(SAMPLES)
 
-	cset shield --userset=sdr --exec -- ../build/utils/run_dur_flowgraph -m --run=$(RUN) --stages=$(STAGES) | grep -v cset > $@
+
+	cset shield --userset=sdr --exec -- ../build/utils/run_dur_flowgraph -m --run=$(RUN) --pipes=$(PIPES) --stages=$(STAGES) --samples=$(SAMPLES) | grep -v cset > $@
 
 
 perf-data/buf%.csv:

@@ -4,7 +4,7 @@ files=`ls perf-data/dur_*.csv`
 outfile=perf-data/dur.csv
 rm -f ${outfile}
 
-echo "run,stages,time" > ${outfile}
+echo "run,pipes,stages,samples,time" > ${outfile}
 
 for f in ${files}
 do

@@ -86,11 +86,7 @@ namespace gr {
                               nread,
                               nread + noutput_items,
                               pmt::mp("Start_Time"));
-
-            std::ofstream myfile;
-            myfile.open ("example.csv");
-            myfile << "Duration\n";
-
+            
 
             for (tag_t tag : tags) {
                 double test = (nano - pmt::to_double(tag.value));

@@ -18,11 +18,14 @@ class run_dur_flowgraph {
 private:
 
     int d_stages;
+    int d_pipes;
+    uint64_t d_samples;
+
 
     void create_fork();
 
 public:
-    run_dur_flowgraph(int stages);
+    run_dur_flowgraph(int stages, int pipes, uint64_t samples);
 
     ~run_dur_flowgraph();
 

@@ -31,11 +31,14 @@ d = (pd.read_csv('../perf-data/dur.csv', usecols = ['time']))
 print(d['time'])
 fig, ax = plt.subplots(1, 1)
 
-
-plt.hist(d['time'], bins=20 # [1000000,1500000,2000000,2500000,3000000,3500000,4000000]
-                    , rwidth= 0.9)
 plt.xlabel('duration')
 plt.ylabel('numbers')
 
-#fig.savefig('duration.pdf')
+#fig.savefig('dur-violin.pdf')
+
+ax = fig.add_axes([0,0,1,1])
+
+# Create the boxplot
+bp = ax.violinplot(d['time'])
+
 plt.show()
