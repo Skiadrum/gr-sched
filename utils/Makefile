@@ -6,7 +6,7 @@ BUFFERRESULTS=$(shell python -c 'import itertools; import numpy as np; print(" "
 
 OPTIRESULTS=$(shell python -c 'import itertools; import numpy as np; print(" ".join(["perf-data/opti_{0}_{1}_{2}_{3}_{4}_.csv".format(*x) for x in itertools.product(range(100), np.arange(1,21), [1000000000], ["true"], ["default", "opti", "perf"])]))')
 
-DURRESULTS=$(shell python -c 'import itertools; import numpy as np; print(" ".join(["perf-data/dur_{0}_{1}_{2}_{3}_.csv".format(*x) for x in itertools.product(range(1,10), [0],[10], [102400])]))')
+DURRESULTS=$(shell python -c 'import itertools; import numpy as np; print(" ".join(["perf-data/dur_{0}_{1}_{2}_{3}_.csv".format(*x) for x in itertools.product(range(1,11), [10], [10], [100000000])]))')
 
 REPETITIONS=10
 

@@ -5,9 +5,8 @@
 #include <gnuradio/realtime.h>
 #include <gnuradio/blocks/copy.h>
 
+#include <tuple>
 
-#include <gnuradio/blocks/null_source.h>
-#include <gnuradio/blocks/null_sink.h>
 #include <gnuradio/blocks/head.h>
 
 
@@ -30,19 +29,24 @@ run_dur_flowgraph::create_fork() {
     auto src = sched::timestamp_in::make();
     auto head = blocks::head::make(sizeof(float), d_samples);
 
-    gr::blocks::copy::sptr prev = gr::blocks::copy::make(sizeof(float));
     tb->connect(src, 0, head, 0);
-    tb->connect(head, 0, prev, 0);
 
+    for (int pipe = 0; pipe < d_pipes; pipe++) {
+        auto block = blocks::copy::make(sizeof(float));
+        tb->connect(head, 0, block, 0);
+        blocks.push_back(block);
 
-    for(int stage = 1; stage < d_stages; stage++) {
-        gr::blocks::copy::sptr block = gr::blocks::copy::make(sizeof(float));
-        tb->connect(prev, 0, block, 0);
-        prev = block;
+        for (int stage = 1; stage < d_stages; stage++) {
+            block = blocks::copy::make(sizeof(float));
+            tb->connect(blocks.back(), 0, block, 0);
+            blocks.push_back(block);
+        }
+        auto sinks = sched::timestamp_out::make();
+        tb->connect(blocks.back(), 0, sinks, 0);
+        sink.push_back(sinks);
     }
 
-     sink = sched::timestamp_out::make();
-    tb->connect(prev, 0, sink, 0);
+
 }
 
 run_dur_flowgraph::~run_dur_flowgraph() {
@@ -88,7 +92,7 @@ int main(int argc, char **argv) {
         std::cout << "Error: failed to enable real-time scheduling." << std::endl;
     }
 
-    run_dur_flowgraph* runner = new run_dur_flowgraph(stages, pipes, samples);
+    run_dur_flowgraph *runner = new run_dur_flowgraph(stages, pipes, samples);
 
     if (!machine_readable) {
         std::cout << boost::format("run         %1$20d") % run << std::endl;
@@ -97,33 +101,35 @@ int main(int argc, char **argv) {
         std::cout << boost::format("samples     %1$20d") % samples << std::endl;
         std::cout << boost::format("rt_prio     %1$20s") % rt_prio << std::endl;
 
-        std::cout << std::endl << gr::dot_graph(runner->tb) << std::endl;
+        //   std::cout << std::endl << gr::dot_graph(runner->tb) << std::endl;
     }
 
 
 
-      //  sched::timestamp_out *t;
+    //  sched::timestamp_out *t;
 
-      //  std::vector<long> results = t->getResults();
+    //  std::vector<long> results = t->getResults();
 
-       // sink.getResults;
+    // sink.getResults;
     //    for (auto i = results.begin(); i != results.end(); ++i) {
     //        std::cout << *i << std::endl;
     //    }
 
-        auto start = std::chrono::high_resolution_clock::now();
-        runner->tb->run();
-        std::vector<long> results = runner->sink->getResults();
+    runner->tb->run();
+    int j = 0;
 
-    for (auto i = results.begin(); i != results.end(); ++i) {
-        std::cout << boost::format(" %1$4d, %2$4d,%3$4d, %4$15d, %5$20.12f") % run % pipes % stages % samples % *i << std::endl;
+    std::vector<long> results;
+ //   std::vector<long> start;
+    for (auto i = runner->sink.begin(); i != runner->sink.end(); ++i, ++j) {
+        results = runner->sink.at(j)->getResults();
+        for (int k = 0; k < results.size(); ++k) {
+            std::cout << boost::format(" %1$4d, %2$4d,%3$4d, %4$15d, %5$15d, %6$20.12f") % run % pipes % stages %
+                         samples % j %
+                         results.at(k)
+                        // % start.at(k)
+                      << std::endl;
+        }
 
     }
-
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto time = std::chrono::duration_cast<std::chrono::nanoseconds>(finish - start).count() / 1e9;
-
-
-
     return 0;
 }

@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 import scipy.stats as stats
 import matplotlib.pyplot as plt
-import seaborn as sns
 from matplotlib import cm
 from mpl_toolkits.mplot3d import axes3d, Axes3D
 import pylab as pl
@@ -27,16 +26,34 @@ def conf_int(data, confidence=0.95):
 ################################################################
 ## Line Plot RT-Prio (n, n) scaling
 ################################################################
-d = (pd.read_csv('../perf-data/dur.csv', usecols = ['time']))
-
-print(d['time'])
-fig, ax = plt.subplots(1, 1)
+d = (pd.read_csv('../perf-data/dur.csv'))
 
 
-sns.distplot(d['time']) #bins=1000 # [1000000,1500000,2000000,2500000,3000000,3500000,4000000]
-                    #, rwidth= 0.9)
-plt.xlabel('duration')
-plt.ylabel('numbers')
+d.set_index("pipes", inplace= True)
 
-#fig.savefig('duration-test.pdf')
+#fig.savefig('dur-violin.pdf')
+
+
+# Create the violineplot
+
+
+
+pos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+fig, axes = plt.subplots(1, 1)
+
+test = [d.loc[1]['time'],d.loc[2]['time'],d.loc[3]['time'],d.loc[4]['time'],d.loc[5]['time'],
+        d.loc[6]['time'],d.loc[7]['time'],d.loc[8]['time'],d.loc[9]['time'],d.loc[10]['time']]
+
+print(d.groupby('run')['time'].count())
+t = d.groupby('run').count()
+print(t['time'])
+axes.bar(pos, test)
+
+axes.set_xlabel('Number of Runs')
+axes.set_ylabel('Number of Timestamps')
+
+fig.suptitle("Bar Plot")
+#fig.subplots_adjust(hspace=0.4)
 plt.show()
+
+#fig.savefig('dur-violin.pdf')

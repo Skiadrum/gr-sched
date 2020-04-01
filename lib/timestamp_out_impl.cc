@@ -70,6 +70,10 @@ namespace gr {
             return results;
         }
 
+        std::vector<long> timestamp_out_impl::getStartTime() {
+            return start;
+        }
+
         int
         timestamp_out_impl::work(int noutput_items,
                                  gr_vector_const_void_star &input_items,
@@ -91,8 +95,8 @@ namespace gr {
             for (tag_t tag : tags) {
                 double test = (nano - pmt::to_double(tag.value));
                 results.push_back(test);
+                start.push_back(pmt::to_double((tag.value)));
             //    myfile << test << std::endl;
-
             }
 
 

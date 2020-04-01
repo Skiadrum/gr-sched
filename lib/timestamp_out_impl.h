@@ -38,6 +38,12 @@ namespace gr {
             std::vector<long> results;
 
             std::vector<long> getResults() override;
+
+            std::vector<long> start;
+
+            std::vector<long> getStartTime() override;
+
+
             // Where all the action really happens
             int work(
                     int noutput_items,

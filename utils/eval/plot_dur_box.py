@@ -7,8 +7,10 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from mpl_toolkits.mplot3d import axes3d, Axes3D
 import pylab as pl
-
 plt.style.use('sig-alternate.mplrc')
+
+
+# plt.style.use('grcon.mplrc')
 
 my_colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
@@ -26,13 +28,21 @@ def conf_int(data, confidence=0.95):
 ################################################################
 ## Line Plot RT-Prio (n, n) scaling
 ################################################################
-#d = (pd.read_csv('../perf-data/1_2_3PU-samples=100000000.csv'))
-d = (pd.read_csv('../perf-data/2_3PU-samples=100000000.csv'))
+d = (pd.read_csv('../perf-data/1_2_3PU-samples=100000000.csv'))
+#d = (pd.read_csv('../perf-data/2_3PU-samples=100000000.csv'))
 #d = (pd.read_csv('../perf-data/1PU-samples=100000000.csv'))
 
-print(d)
+#print(d)
 d.set_index("pipes", inplace=True)
+
+
+# dr = d.drop_duplicates(subset='run')
+
+
+# Create the violineplot
+
 print('1x1:', d.loc[1]['time'].mean())
+print('1x1:', d.loc[1]['time'].median())
 print('2x2:', d.loc[2]['time'].mean())
 print('3x3:', d.loc[3]['time'].mean())
 print('4x4:', d.loc[4]['time'].mean())
@@ -42,29 +52,7 @@ print('7x7:', d.loc[7]['time'].mean())
 print('8x8:', d.loc[8]['time'].mean())
 print('9x9:', d.loc[9]['time'].mean())
 print('10x10:', d.loc[10]['time'].mean())
-
-print(np.std(d.loc[10]['time']))
-
-print('10x10:', d.loc[1]['time'].count())
-print('10x10:', d.loc[2]['time'].count())
-print('10x10:', d.loc[3]['time'].count())
-print('10x10:', d.loc[4]['time'].count())
-print('10x10:', d.loc[5]['time'].count())
-print('10x10:', d.loc[6]['time'].count())
-print('10x10:', d.loc[7]['time'].count())
-print('10x10:', d.loc[8]['time'].count())
-print('10x10:', d.loc[9]['time'].count())
-print('10x10:', d.loc[10]['time'].count())
-
-# dr = d.drop_duplicates(subset='run')
-
-# print(dr)
-# print(dr['run'])
-# fig.savefig('dur-violin.pdf')
-
-
-# Create the violineplot
-
+print('10x10:', d.loc[10]['time'].median())
 
 pos = ['10x10', '2x2', 3, 4, 5, 6, 7, 8, 9, 10]
 fig, axes = plt.subplots(1, 1)
@@ -73,16 +61,7 @@ test = [d.loc[1]['time'], d.loc[2]['time'], d.loc[3]['time'], d.loc[4]['time'], 
         d.loc[6]['time'], d.loc[7]['time'], d.loc[8]['time'], d.loc[9]['time'], d.loc[10]['time']]
 
 
-
-#d.drop()
-# pos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
-# test = []
-# for x in d['run']:
-#    test.append([d.loc[x]['time']])
-
-
-axes.violinplot(test, showextrema=True, showmeans=True)
+axes.boxplot(test, showfliers=False, notch=True, showmeans=True)
 axes.set_title('Custom violinplot 1')
 
 # axes.set_xlabel('Number of Runs')

@@ -30,9 +30,8 @@ public:
     ~run_dur_flowgraph();
 
     top_block_sptr tb;
-    //sched::timestamp_in::sptr src;
-    sched::timestamp_out::sptr sink;
-    //std::vector<blocks::copy::sptr> blocks;
+    std::vector<sched::timestamp_out::sptr> sink;
+    std::vector<blocks::copy::sptr> blocks;
 
 };
 

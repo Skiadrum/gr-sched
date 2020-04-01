@@ -38,6 +38,8 @@ namespace gr {
 
             virtual ::std::vector<long> getResults() = 0;
 
+            virtual ::std::vector<long> getStartTime() = 0;
+
 
             /*!
              * \brief Return a shared_ptr to a new instance of sched::timestamp_out.
